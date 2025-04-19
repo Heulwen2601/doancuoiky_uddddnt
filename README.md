@@ -3,6 +3,74 @@
 A new Flutter project.
 
 ## Getting Started
+# 📦 Đồ án cuối kỳ - Ứng dụng Thương Mại Điện Tử (`doancuoiky_uddddnt`)
+
+**Môn học:** Cross-Platform Mobile Application Development - 502071  
+**Học kỳ:** Semester 2 – 2024–2025  
+**Giảng viên:** Mai Văn Mạnh  
+**Nhóm sinh viên:**  
+- Nguyễn Văn A – 2150123  
+- Trần Thị B – 2150456  
+- Lê Văn C – 2150789
+
+---
+
+## 🚀 Mô tả dự án
+
+Đây là ứng dụng thương mại điện tử đa nền tảng (Android, Web, Windows) phát triển bằng Flutter. Ứng dụng cho phép người dùng:
+- Duyệt và mua các sản phẩm máy tính, linh kiện máy tính
+- Quản lý đơn hàng, giỏ hàng
+- Đánh giá sản phẩm, tích điểm
+- Tích hợp quản trị viên với bảng điều khiển thống kê
+- Hỗ trợ trò chuyện với admin
+- Hỗ trợ chế độ offline cơ bản
+
+---
+
+## 🛠️ Công nghệ sử dụng
+
+| Layer | Công nghệ |
+|-------|-----------|
+| Frontend | Flutter (Dart), Provider, Hive, Dio |
+| Backend | Firebase (Auth, Firestore, Cloud Functions)* |
+| Triển khai | Firebase Hosting (Web), Android (APK), Windows (EXE) |
+
+(*) Có thể thay bằng backend riêng: Express.js, Spring MVC,...
+
+---
+
+## 📲 Các nền tảng hỗ trợ
+
+- ✅ Android (APK `build/app/outputs/flutter-apk/app-release.apk`)
+- ✅ Windows (EXE `build/windows/runner/Release`)
+- ✅ Web (đã deploy): [https://your-app-url.web.app](https://your-app-url.web.app)
+
+---
+
+## 🧪 Tính năng chính
+
+- [x] Đăng ký / Đăng nhập (email, tên, địa chỉ)
+- [x] Mua hàng không cần đăng nhập
+- [x] Hiển thị danh mục sản phẩm (Khuyến mãi, Bán chạy,...)
+- [x] Chi tiết sản phẩm, đánh giá, bình luận
+- [x] Lọc / tìm kiếm / sắp xếp sản phẩm
+- [x] Giỏ hàng, thanh toán, mã giảm giá
+- [x] Tích điểm cho khách hàng trung thành
+- [x] Lịch sử đơn hàng, trạng thái giao hàng
+- [x] Dashboard cho admin (thống kê, biểu đồ,...)
+- [x] Chat hỗ trợ giữa khách và admin
+- [x] Offline mode (Hive + Firestore sync)
+
+---
+
+## 📦 Cài đặt & chạy dự án
+
+```bash
+git clone https://github.com/yourgroup/doancuoiky_uddddnt.git
+cd doancuoiky_uddddnt
+flutter pub get
+flutter run -d chrome # hoặc apk/windows tùy nền tảng
+
 
 This project is a starting point for a Flutter application.
 
