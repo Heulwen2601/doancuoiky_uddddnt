@@ -9,9 +9,8 @@ A new Flutter project.
 **Học kỳ:** Semester 2 – 2024–2025  
 **Giảng viên:** Mai Văn Mạnh  
 **Nhóm sinh viên:**  
-- Nguyễn Văn A – 2150123  
-- Trần Thị B – 2150456  
-- Lê Văn C – 2150789
+- Hà Thị Nguyệt Hà – 52200017
+- Lâm Huỳnh NhưNhư – 52200028
 
 ---
 
