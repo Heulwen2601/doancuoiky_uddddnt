@@ -26,18 +26,6 @@ A new Flutter project.
 
 ---
 
-## 🛠️ Công nghệ sử dụng
-
-| Layer | Công nghệ |
-|-------|-----------|
-| Frontend | Flutter (Dart), Provider, Hive, Dio |
-| Backend | Firebase (Auth, Firestore, Cloud Functions)* |
-| Triển khai | Firebase Hosting (Web), Android (APK), Windows (EXE) |
-
-(*) Có thể thay bằng backend riêng: Express.js, Spring MVC,...
-
----
-
 ## 📲 Các nền tảng hỗ trợ
 
 - ✅ Android (APK `build/app/outputs/flutter-apk/app-release.apk`)
@@ -68,7 +56,7 @@ A new Flutter project.
 git clone https://github.com/yourgroup/doancuoiky_uddddnt.git
 cd doancuoiky_uddddnt
 flutter pub get
-flutter run -d chrome # hoặc apk/windows tùy nền tảng
+flutter run -d chrome đa nền tảngtảng
 
 
 This project is a starting point for a Flutter application.
