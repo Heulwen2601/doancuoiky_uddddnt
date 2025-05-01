@@ -9,7 +9,7 @@ const productDemoImg4 = "https://i.imgur.com/q9oF9Yq.png";
 const productDemoImg5 = "https://i.imgur.com/MsppAcx.png";
 const productDemoImg6 = "https://i.imgur.com/JfyZlnO.png";
 
-// End For demo
+// End for demo 
 
 const grandisExtendedFont = "Grandis Extended";
 
