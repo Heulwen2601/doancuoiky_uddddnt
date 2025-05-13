@@ -29,7 +29,7 @@ class AuthentificationService {
   static const String REQUIRES_RECENT_LOGIN_EXCEPTION_CODE =
       "requires-recent-login";
 
-  late FirebaseAuth _firebaseAuth;
+  FirebaseAuth _firebaseAuth = FirebaseAuth.instance;
 
   AuthentificationService._privateConstructor();
   static AuthentificationService _instance =

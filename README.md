@@ -10,7 +10,7 @@ A new Flutter project.
 **Giảng viên:** Mai Văn Mạnh  
 **Nhóm sinh viên:**  
 - Hà Thị Nguyệt Hà – 52200017
-- Lâm Huỳnh NhưNhư – 52200028
+- Lâm Huỳnh Như – 52200028
 
 ---
 

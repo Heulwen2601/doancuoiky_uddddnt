@@ -21,7 +21,7 @@ class UserDatabaseHelper {
   factory UserDatabaseHelper() {
     return _instance;
   }
-  late FirebaseFirestore _firebaseFirestore;
+  FirebaseFirestore _firebaseFirestore = FirebaseFirestore.instance;
   FirebaseFirestore get firestore {
     if (_firebaseFirestore == null) {
       _firebaseFirestore = FirebaseFirestore.instance;

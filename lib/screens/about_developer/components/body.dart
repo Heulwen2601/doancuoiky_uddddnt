@@ -35,70 +35,28 @@ class Body extends StatelessWidget {
                 InkWell(
                   onTap: () async {
                     const String linkedInUrl =
-                        "https://www.linkedin.com/in/imrb7here";
+                        "https://www.facebook.com/lhnhu2004/";
                     await launchUrl(linkedInUrl);
                   },
                   child: buildDeveloperAvatar(),
                 ),
                 SizedBox(height: getProportionateScreenHeight(30)),
                 Text(
-                  '" Rahul Badgujar "',
+                  '" Lam Huynh Nhu "',
                   style: TextStyle(
                     fontSize: 25,
                     fontWeight: FontWeight.w900,
                   ),
                 ),
                 Text(
-                  "PCCoE Pune",
+                  "HCM",
                   style: TextStyle(
                     fontSize: 21,
                     fontWeight: FontWeight.w500,
                   ),
                 ),
                 SizedBox(height: getProportionateScreenHeight(30)),
-                Row(
-                  children: [
-                    Spacer(),
-                    IconButton(
-                      icon: SvgPicture.asset(
-                        "assets/icons/github_icon.svg",
-                        color: kTextColor.withOpacity(0.75),
-                      ),
-                      color: kTextColor.withOpacity(0.75),
-                      iconSize: 40,
-                      padding: EdgeInsets.all(16),
-                      onPressed: () async {
-                        const String githubUrl = "https://github.com/imRB7here";
-                        await launchUrl(githubUrl);
-                      },
-                    ),
-                    IconButton(
-                      icon: SvgPicture.asset(
-                        "assets/icons/linkedin_icon.svg",
-                        color: kTextColor.withOpacity(0.75),
-                      ),
-                      iconSize: 40,
-                      padding: EdgeInsets.all(16),
-                      onPressed: () async {
-                        const String linkedInUrl =
-                            "https://www.linkedin.com/in/imrb7here";
-                        await launchUrl(linkedInUrl);
-                      },
-                    ),
-                    IconButton(
-                      icon: SvgPicture.asset("assets/icons/instagram_icon.svg",
-                          color: kTextColor.withOpacity(0.75)),
-                      iconSize: 40,
-                      padding: EdgeInsets.all(16),
-                      onPressed: () async {
-                        const String instaUrl =
-                            "https://www.instagram.com/_rahul.badgujar_";
-                        await launchUrl(instaUrl);
-                      },
-                    ),
-                    Spacer(),
-                  ],
-                ),
+                
                 SizedBox(height: getProportionateScreenHeight(50)),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
