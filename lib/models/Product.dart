@@ -2,11 +2,11 @@ import 'package:do_an_ck_uddddnt/models/Model.dart';
 import 'package:enum_to_string/enum_to_string.dart';
 
 enum ProductType {
-  Electronics,
-  Books,
-  Fashion,
-  Groceries,
-  Art,
+  Computers,
+  Gaming_chair,
+  Tech_cleaning_kit,
+  Rgb_lighting,
+  Accessories,
   Others,
 }
 

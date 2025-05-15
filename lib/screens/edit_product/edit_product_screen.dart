@@ -21,7 +21,7 @@ class EditProductScreen extends StatelessWidget {
         body: Body(
           productToEdit: productToEdit  ?? Product(
             '0',
-            productType: ProductType.Electronics,
+            productType: ProductType.Computers,
             images: [],
             title: 'Default Product',
             variant: 'Default Variant',

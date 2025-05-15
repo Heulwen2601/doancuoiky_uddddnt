@@ -30,29 +30,29 @@ class Body extends StatefulWidget {
 class _BodyState extends State<Body> {
   final productCategories = <Map>[
     <String, dynamic>{
-      ICON_KEY: "assets/icons/Electronics.svg",
-      TITLE_KEY: "Electronics",
-      PRODUCT_TYPE_KEY: ProductType.Electronics,
+      ICON_KEY: "assets/icons/Computers.svg",
+      TITLE_KEY: "Computers",
+      PRODUCT_TYPE_KEY: ProductType.Computers,
     },
     <String, dynamic>{
-      ICON_KEY: "assets/icons/Books.svg",
-      TITLE_KEY: "Books",
-      PRODUCT_TYPE_KEY: ProductType.Books,
+      ICON_KEY: "assets/icons/Gaming_chair.svg",
+      TITLE_KEY: "Gaming chair",
+      PRODUCT_TYPE_KEY: ProductType.Gaming_chair,
     },
     <String, dynamic>{
-      ICON_KEY: "assets/icons/Fashion.svg",
-      TITLE_KEY: "Fashion",
-      PRODUCT_TYPE_KEY: ProductType.Fashion,
+      ICON_KEY: "assets/icons/Tech_cleaning_kit.svg",
+      TITLE_KEY: "Technology cleaning kit",
+      PRODUCT_TYPE_KEY: ProductType.Tech_cleaning_kit,
     },
     <String, dynamic>{
-      ICON_KEY: "assets/icons/Groceries.svg",
-      TITLE_KEY: "Groceries",
-      PRODUCT_TYPE_KEY: ProductType.Groceries,
+      ICON_KEY: "assets/icons/Rgb_lighting.svg",
+      TITLE_KEY: "RGB lighting",
+      PRODUCT_TYPE_KEY: ProductType.Rgb_lighting,
     },
     <String, dynamic>{
-      ICON_KEY: "assets/icons/Art.svg",
-      TITLE_KEY: "Art",
-      PRODUCT_TYPE_KEY: ProductType.Art,
+      ICON_KEY: "assets/icons/Accessories.svg",
+      TITLE_KEY: "Accessories",
+      PRODUCT_TYPE_KEY: ProductType.Accessories,
     },
     <String, dynamic>{
       ICON_KEY: "assets/icons/Others.svg",

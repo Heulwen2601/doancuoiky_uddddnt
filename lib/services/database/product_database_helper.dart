@@ -236,7 +236,7 @@ class ProductDatabaseHelper {
 
       final Product updateProduct = Product(
         '0',
-        productType: ProductType.Electronics,
+        productType: ProductType.Computers,
         images: [],
         title: 'Default Product',
         variant: 'Default Variant',

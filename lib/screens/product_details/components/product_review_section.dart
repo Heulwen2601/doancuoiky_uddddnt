@@ -20,83 +20,71 @@ class ProductReviewsSection extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return SizedBox(
-      height: getProportionateScreenHeight(320),
-      child: Stack(
+    return TopRoundedContainer(
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          TopRoundedContainer(
-            child: Column(
-              children: [
-                Text(
-                  "Product Reviews",
-                  style: TextStyle(
-                    fontSize: 21,
-                    color: Colors.black,
-                    fontWeight: FontWeight.w600,
-                  ),
-                ),
-                SizedBox(height: getProportionateScreenHeight(20)),
-                Expanded(
-                  child: StreamBuilder<List<Review>>(
-                    stream: ProductDatabaseHelper()
-                        .getAllReviewsStreamForProductId(product.id),
-                    builder: (context, snapshot) {
-                      if (snapshot.hasData) {
-                        final reviewsList = snapshot.data!;
-                        if (reviewsList?.isEmpty ?? true) {
-                          return Center(
-                            child: Column(
-                              children: [
-                                SvgPicture.asset(
-                                  "assets/icons/review.svg",
-                                  color: kTextColor,
-                                  width: 40,
-                                ),
-                                SizedBox(height: 8),
-                                Text(
-                                  "No reviews yet",
-                                  style: TextStyle(
-                                    fontWeight: FontWeight.bold,
-                                  ),
-                                ),
-                              ],
-                            ),
-                          );
-                        }
-                        return ListView.builder(
-                          physics: BouncingScrollPhysics(),
-                          itemCount: reviewsList?.length ?? 0, // If reviewsList is null, fallback to 0
-                          itemBuilder: (context, index) {
-                            return ReviewBox(
-                              review: reviewsList![index],
-                            );
-                          },
-                        );
-                      } else if (snapshot.connectionState ==
-                          ConnectionState.waiting) {
-                        return Center(
-                          child: CircularProgressIndicator(),
-                        );
-                      } else if (snapshot.hasError) {
-                        final error = snapshot.error;
-                        Logger().w(error.toString());
-                      }
-                      return Center(
-                        child: Icon(
-                          Icons.error,
-                          color: kTextColor,
-                          size: 50,
-                        ),
-                      );
-                    },
-                  ),
-                ),
-              ],
-            ),
-          ),
           Align(
             alignment: Alignment.topCenter,
             child: buildProductRatingWidget(product.rating),
+          ),
+          SizedBox(height: getProportionateScreenHeight(16)),
+          Text(
+            "Product Reviews",
+            style: TextStyle(
+              fontSize: 21,
+              color: Colors.black,
+              fontWeight: FontWeight.w600,
+            ),
+          ),
+          SizedBox(height: getProportionateScreenHeight(10)),
+          StreamBuilder<List<Review>>(
+            stream: ProductDatabaseHelper()
+                .getAllReviewsStreamForProductId(product.id),
+            builder: (context, snapshot) {
+              if (snapshot.connectionState == ConnectionState.waiting) {
+                return Center(child: CircularProgressIndicator());
+              } else if (snapshot.hasError) {
+                Logger().w(snapshot.error.toString());
+                return Center(
+                  child: Icon(Icons.error, color: kTextColor, size: 50),
+                );
+              } else if (snapshot.hasData) {
+                final reviewsList = snapshot.data!;
+                if (reviewsList.isEmpty) {
+                  return Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 20),
+                    child: Center(
+                      child: Column(
+                        children: [
+                          SvgPicture.asset(
+                            "assets/icons/review.svg",
+                            color: kTextColor,
+                            width: 40,
+                          ),
+                          SizedBox(height: 8),
+                          Text(
+                            "No reviews yet",
+                            style: TextStyle(fontWeight: FontWeight.bold),
+                          ),
+                        ],
+                      ),
+                    ),
+                  );
+                }
+
+                return ListView.builder(
+                  physics: NeverScrollableScrollPhysics(),
+                  shrinkWrap: true, // 🔥 BẮT BUỘC nếu nằm trong Column
+                  itemCount: reviewsList.length,
+                  itemBuilder: (context, index) {
+                    return ReviewBox(review: reviewsList[index]);
+                  },
+                );
+              } else {
+                return Center(child: Text("Unknown state"));
+              }
+            },
           ),
         ],
       ),
@@ -125,10 +113,7 @@ class ProductReviewsSection extends StatelessWidget {
             ),
           ),
           SizedBox(width: 5),
-          Icon(
-            Icons.star,
-            color: Colors.white,
-          ),
+          Icon(Icons.star, color: Colors.white),
         ],
       ),
     );

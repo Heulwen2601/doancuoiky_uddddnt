@@ -70,7 +70,7 @@ class _EditProductFormState extends State<EditProductForm> {
     if (widget.product == null) {
       product = Product(
         '0',
-        productType: ProductType.Electronics,
+        productType: ProductType.Computers,
         images: [],
         title: 'Default Product',
         variant: 'Default Variant',
@@ -392,7 +392,7 @@ class _EditProductFormState extends State<EditProductForm> {
       controller: titleFieldController,
       keyboardType: TextInputType.name,
       decoration: InputDecoration(
-        hintText: "e.g., Samsung Galaxy F41 Mobile",
+        hintText: "e.g., Gaming PC Raptor X9",
         labelText: "Product Title",
         floatingLabelBehavior: FloatingLabelBehavior.always,
       ),
@@ -411,7 +411,7 @@ class _EditProductFormState extends State<EditProductForm> {
       controller: variantFieldController,
       keyboardType: TextInputType.name,
       decoration: InputDecoration(
-        hintText: "e.g., Fusion Green",
+        hintText: "e.g., Intel i9 Processor",
         labelText: "Variant",
         floatingLabelBehavior: FloatingLabelBehavior.always,
       ),
@@ -431,7 +431,7 @@ class _EditProductFormState extends State<EditProductForm> {
       keyboardType: TextInputType.multiline,
       decoration: InputDecoration(
         hintText:
-            "e.g., RAM: 4GB | Front Camera: 30MP | Rear Camera: Quad Camera Setup",
+            "e.g., Intel i9 Processor | RTX 4090 Graphics Card | 32GB RAM, 2TB SSD",
         labelText: "Highlights",
         floatingLabelBehavior: FloatingLabelBehavior.always,
       ),
@@ -452,7 +452,7 @@ class _EditProductFormState extends State<EditProductForm> {
       keyboardType: TextInputType.multiline,
       decoration: InputDecoration(
         hintText:
-            "e.g., This a flagship phone under made in India, by Samsung. With this device, Samsung introduces its new F Series.",
+            "e.g., The Raptor X9 is a powerhouse designed for ultimate gaming and productivity. Equipped with the latest Intel i9 processor and the powerful RTX 4090, it handles all your gaming and professional needs effortlessly.",
         labelText: "Description",
         floatingLabelBehavior: FloatingLabelBehavior.always,
       ),
@@ -714,15 +714,19 @@ class _EditProductFormState extends State<EditProductForm> {
     return allImagesUpdated;
   }
 
-  Future<void> addImageButtonCallback({required int index}) async {
+  Future<void> addImageButtonCallback({required int? index}) async {
     final productDetails = Provider.of<ProductDetails>(context, listen: false);
+
     if (index == null && productDetails.selectedImages.length >= 3) {
       ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text("Max 3 images can be uploaded")));
+        SnackBar(content: Text("Max 3 images can be uploaded")),
+      );
       return;
     }
+
     String? path;
-    String snackbarMessage;
+    String? snackbarMessage;
+
     try {
       path = await choseImageFromLocalFiles(context);
       if (path == null) {
@@ -734,27 +738,24 @@ class _EditProductFormState extends State<EditProductForm> {
     } catch (e) {
       Logger().i("Unknown Exception: $e");
       snackbarMessage = e.toString();
-    } finally {
-      String snackbarMessage = '';
+    }
 
-      if (snackbarMessage != null) {
-        Logger().i(snackbarMessage);
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text(snackbarMessage),
-          ),
-        );
-      }
+    if (snackbarMessage != null) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text(snackbarMessage)),
+      );
+      return; // Nếu có lỗi, dừng tại đây
     }
-    if (path == null) {
-      return;
-    }
+
+    if (path == null) return;
+
+    final newImage = CustomImage(imgType: ImageType.local, path: path);
+
     if (index == null) {
-      productDetails.addNewSelectedImage(
-          CustomImage(imgType: ImageType.local, path: path));
+      productDetails.addNewSelectedImage(newImage);
     } else {
-      productDetails.setSelectedImageAtIndex(
-          CustomImage(imgType: ImageType.local, path: path), index);
+      productDetails.setSelectedImageAtIndex(newImage, index);
     }
   }
+
 }

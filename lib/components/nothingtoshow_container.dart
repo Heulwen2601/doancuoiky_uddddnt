@@ -16,10 +16,11 @@ class NothingToShowContainer extends StatelessWidget {
   }) : super(key: key);
   @override
   Widget build(BuildContext context) {
-    return SizedBox(
+    return Container(
       width: SizeConfig.screenWidth * 0.75,
-      height: SizeConfig.screenHeight * 0.2,
+      padding: EdgeInsets.symmetric(vertical: 16),
       child: Column(
+        mainAxisSize: MainAxisSize.min, 
         children: [
           SvgPicture.asset(
             iconPath,
@@ -46,4 +47,5 @@ class NothingToShowContainer extends StatelessWidget {
       ),
     );
   }
+
 }
