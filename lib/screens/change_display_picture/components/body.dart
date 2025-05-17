@@ -89,7 +89,7 @@ class Body extends StatelessWidget {
 
   void getImageFromUser(BuildContext context, ChosenImage bodyState) async {
     String? path;
-    String snackbarMessage;
+    String snackbarMessage = '';
     try {
       path = await choseImageFromLocalFiles(context);
       if (path == null) {
@@ -102,8 +102,6 @@ class Body extends StatelessWidget {
       Logger().i("LocalFileHandlingException: $e");
       snackbarMessage = e.toString();
     } finally {
-      String snackbarMessage = '';
-
       if (snackbarMessage != null) {
         Logger().i(snackbarMessage);
         ScaffoldMessenger.of(context).showSnackBar(
@@ -152,7 +150,7 @@ class Body extends StatelessWidget {
   Future<void> uploadImageToFirestorage(
       BuildContext context, ChosenImage bodyState) async {
     bool uploadDisplayPictureStatus = false;
-    String snackbarMessage;
+    String snackbarMessage = '';
     try {
       final downloadUrl = await FirestoreFilesAccess().uploadFileToPath(
           bodyState.chosenImage,
@@ -172,8 +170,6 @@ class Body extends StatelessWidget {
       Logger().w("Unknown Exception: $e");
       snackbarMessage = "Something went wrong";
     } finally {
-      String snackbarMessage = '';
-
       Logger().i(snackbarMessage);
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
@@ -208,7 +204,7 @@ class Body extends StatelessWidget {
   Future<void> removeImageFromFirestore(
       BuildContext context, ChosenImage bodyState) async {
     bool status = false;
-    String snackbarMessage;
+    String snackbarMessage = '';
     try {
       bool fileDeletedFromFirestore = false;
       fileDeletedFromFirestore = await FirestoreFilesAccess()
@@ -230,8 +226,6 @@ class Body extends StatelessWidget {
       Logger().w("Unknown Exception: $e");
       snackbarMessage = "Something went wrong";
     } finally {
-      String snackbarMessage = '';
-      
       Logger().i(snackbarMessage);
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(

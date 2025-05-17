@@ -186,7 +186,7 @@ class _BodyState extends State<Body> {
             }
 
             bool productInfoDeleted = false;
-            String snackbarMessage;
+            String snackbarMessage = '';
             try {
               final deleteProductFuture =
                   ProductDatabaseHelper().deleteUserProduct(product.id);
@@ -211,8 +211,6 @@ class _BodyState extends State<Body> {
               Logger().w("Unknown Exception: $e");
               snackbarMessage = e.toString();
             } finally {
-              String snackbarMessage = '';
-
               Logger().i(snackbarMessage);
               ScaffoldMessenger.of(context).showSnackBar(
                 SnackBar(

@@ -38,7 +38,7 @@ class AddressBox extends StatelessWidget {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(
-                            "${address.title}",
+                            "${address.title  ?? 'Không rõ'}",
                             style: TextStyle(
                               fontSize: 22,
                               color: Colors.black,
@@ -47,55 +47,55 @@ class AddressBox extends StatelessWidget {
                             textAlign: TextAlign.center,
                           ),
                           Text(
-                            "${address.receiver}",
+                            "${address.receiver  ?? 'Không rõ'}",
                             style: TextStyle(
                               fontSize: 16,
                             ),
                           ),
                           Text(
-                            "${address.addresLine1}",
+                            "${address.addresLine1  ?? 'Không rõ'}",
                             style: TextStyle(
                               fontSize: 16,
                             ),
                           ),
                           Text(
-                            "${address.addressLine2}",
+                            "${address.addressLine2  ?? 'Không rõ'}",
                             style: TextStyle(
                               fontSize: 16,
                             ),
                           ),
                           Text(
-                            "City: ${address.city}",
+                            "City: ${address.city  ?? 'Không rõ'}",
                             style: TextStyle(
                               fontSize: 16,
                             ),
                           ),
                           Text(
-                            "District: ${address.district}",
+                            "District: ${address.district  ?? 'Không rõ'}",
                             style: TextStyle(
                               fontSize: 16,
                             ),
                           ),
                           Text(
-                            "State: ${address.state}",
+                            "State: ${address.state  ?? 'Không rõ'}",
                             style: TextStyle(
                               fontSize: 16,
                             ),
                           ),
                           Text(
-                            "Landmark: ${address.landmark}",
+                            "Landmark: ${address.landmark  ?? 'Không rõ'}",
                             style: TextStyle(
                               fontSize: 16,
                             ),
                           ),
                           Text(
-                            "PIN: ${address.pincode}",
+                            "PIN: ${address.pincode  ?? 'Không rõ'}",
                             style: TextStyle(
                               fontSize: 16,
                             ),
                           ),
                           Text(
-                            "Phone: ${address.phone}",
+                            "Phone: ${address.phone  ?? 'Không rõ'}",
                             style: TextStyle(
                               fontSize: 16,
                             ),

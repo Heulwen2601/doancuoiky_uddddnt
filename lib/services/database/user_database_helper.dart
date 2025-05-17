@@ -4,6 +4,7 @@ import 'package:do_an_ck_uddddnt/models/CartItem.dart';
 import 'package:do_an_ck_uddddnt/models/OrderedProduct.dart';
 import 'package:do_an_ck_uddddnt/services/authentification/authentification_service.dart';
 import 'package:do_an_ck_uddddnt/services/database/product_database_helper.dart';
+import 'package:logger/logger.dart';
 
 class UserDatabaseHelper {
   static const String USERS_COLLECTION_NAME = "users";
@@ -134,7 +135,12 @@ class UserDatabaseHelper {
         .collection(ADDRESSES_COLLECTION_NAME)
         .doc(id)
         .get();
-    final address = Address.fromMap(doc.data() ?? {}, id: doc.id);
+
+    if (!doc.exists || doc.data() == null) {
+      throw Exception("Address not found");
+    }
+
+    final address = Address.fromMap(doc.data()!, id: doc.id);
     return address;
   }
 
@@ -183,20 +189,32 @@ class UserDatabaseHelper {
   }
 
   Future<bool> addProductToCart(String productId) async {
-    String uid = AuthentificationService().currentUser.uid;
-    final cartCollectionRef = firestore
-        .collection(USERS_COLLECTION_NAME)
-        .doc(uid)
-        .collection(CART_COLLECTION_NAME);
-    final docRef = cartCollectionRef.doc(productId);
-    final docSnapshot = await docRef.get();
-    bool alreadyPresent = docSnapshot.exists;
-    if (alreadyPresent == false) {
-      docRef.set(CartItem(itemCount: 1).toMap());
-    } else {
-      docRef.update({CartItem.ITEM_COUNT_KEY: FieldValue.increment(1)});
+    try {
+      final currentUser = AuthentificationService().currentUser;
+      if (currentUser == null) {
+        throw Exception("User is not logged in");
+      }
+
+      final uid = currentUser.uid;
+
+      final cartCollectionRef = firestore
+          .collection(USERS_COLLECTION_NAME)
+          .doc(uid)
+          .collection(CART_COLLECTION_NAME);
+      final docRef = cartCollectionRef.doc(productId);
+      final docSnapshot = await docRef.get();
+
+      if (!docSnapshot.exists) {
+        await docRef.set(CartItem(itemCount: 1).toMap());
+      } else {
+        await docRef.update({CartItem.ITEM_COUNT_KEY: FieldValue.increment(1)});
+      }
+
+      return true;
+    } catch (e, stack) {
+      Logger().e("Failed to add product to cart", error: e, stackTrace: stack);
+      return false;
     }
-    return true;
   }
 
   Future<List<String>> emptyCart() async {

@@ -164,7 +164,7 @@ class _BodyState extends State<Body> {
           if (confirmation) {
             if (direction == DismissDirection.startToEnd) {
               bool result = false;
-              String snackbarMessage;
+              String snackbarMessage = '';
               try {
                 result = await UserDatabaseHelper()
                     .removeProductFromCart(cartItemId);
@@ -181,8 +181,6 @@ class _BodyState extends State<Body> {
                 Logger().w("Unknown Exception: $e");
                 snackbarMessage = "Something went wrong";
               } finally {
-                String snackbarMessage = '';
-
                 Logger().i(snackbarMessage);
                 ScaffoldMessenger.of(context).showSnackBar(
                   SnackBar(

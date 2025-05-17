@@ -2,8 +2,8 @@ import 'Model.dart';
 
 class Address extends Model {
   static const String TITLE_KEY = "title";
-  static const String ADDRESS_LINE_1_KEY = "address_line_1";
-  static const String ADDRESS_LINE_2_KEY = "address_line_2";
+  static const String ADDRESS_LINE_1_KEY = "addresLine1"; // ✅ CHỈNH CHUẨN THEO FIRESTORE
+  static const String ADDRESS_LINE_2_KEY = "addresLine2";
   static const String CITY_KEY = "city";
   static const String DISTRICT_KEY = "district";
   static const String STATE_KEY = "state";
@@ -12,20 +12,19 @@ class Address extends Model {
   static const String RECEIVER_KEY = "receiver";
   static const String PHONE_KEY = "phone";
 
-  String title;
-  String receiver;
+  final String title;
+  final String receiver;
+  final String addresLine1;
+  final String addressLine2;
+  final String city;
+  final String district;
+  final String state;
+  final String landmark;
+  final String pincode;
+  final String phone;
 
-  String addresLine1;
-  String addressLine2;
-  String city;
-  String district;
-  String state;
-  String landmark;
-  String pincode;
-  String phone;
-
-  Address(String s, {
-    String? id,
+  Address({
+    required String id,
     required this.title,
     required this.receiver,
     required this.addresLine1,
@@ -36,27 +35,27 @@ class Address extends Model {
     required this.landmark,
     required this.pincode,
     required this.phone,
-  }) : super(id!);
+  }) : super(id);
 
-  factory Address.fromMap(Map<String, dynamic> map, {String? id}) {
+  factory Address.fromMap(Map<String, dynamic> map, {required String id}) {
     return Address(
-      id!,
-      title: map[TITLE_KEY],
-      receiver: map[RECEIVER_KEY],
-      addresLine1: map[ADDRESS_LINE_1_KEY],
-      addressLine2: map[ADDRESS_LINE_2_KEY],
-      city: map[CITY_KEY],
-      district: map[DISTRICT_KEY],
-      state: map[STATE_KEY],
-      landmark: map[LANDMARK_KEY],
-      pincode: map[PINCODE_KEY],
-      phone: map[PHONE_KEY],
+      id: id,
+      title: map[TITLE_KEY] ?? '',
+      receiver: map[RECEIVER_KEY] ?? '',
+      addresLine1: map[ADDRESS_LINE_1_KEY] ?? '',
+      addressLine2: map[ADDRESS_LINE_2_KEY] ?? '',
+      city: map[CITY_KEY] ?? '',
+      district: map[DISTRICT_KEY] ?? '',
+      state: map[STATE_KEY] ?? '',
+      landmark: map[LANDMARK_KEY] ?? '',
+      pincode: map[PINCODE_KEY] ?? '',
+      phone: map[PHONE_KEY] ?? '',
     );
   }
 
   @override
   Map<String, dynamic> toMap() {
-    final map = <String, dynamic>{
+    return {
       TITLE_KEY: title,
       RECEIVER_KEY: receiver,
       ADDRESS_LINE_1_KEY: addresLine1,
@@ -68,23 +67,21 @@ class Address extends Model {
       PINCODE_KEY: pincode,
       PHONE_KEY: phone,
     };
-
-    return map;
   }
 
   @override
   Map<String, dynamic> toUpdateMap() {
     final map = <String, dynamic>{};
-    if (title != null) map[TITLE_KEY] = title;
-    if (receiver != null) map[RECEIVER_KEY] = receiver;
-    if (addresLine1 != null) map[ADDRESS_LINE_1_KEY] = addresLine1;
-    if (addressLine2 != null) map[ADDRESS_LINE_2_KEY] = addressLine2;
-    if (city != null) map[CITY_KEY] = city;
-    if (district != null) map[DISTRICT_KEY] = district;
-    if (state != null) map[STATE_KEY] = state;
-    if (landmark != null) map[LANDMARK_KEY] = landmark;
-    if (pincode != null) map[PINCODE_KEY] = pincode;
-    if (phone != null) map[PHONE_KEY] = phone;
+    if (title.isNotEmpty) map[TITLE_KEY] = title;
+    if (receiver.isNotEmpty) map[RECEIVER_KEY] = receiver;
+    if (addresLine1.isNotEmpty) map[ADDRESS_LINE_1_KEY] = addresLine1;
+    if (addressLine2.isNotEmpty) map[ADDRESS_LINE_2_KEY] = addressLine2;
+    if (city.isNotEmpty) map[CITY_KEY] = city;
+    if (district.isNotEmpty) map[DISTRICT_KEY] = district;
+    if (state.isNotEmpty) map[STATE_KEY] = state;
+    if (landmark.isNotEmpty) map[LANDMARK_KEY] = landmark;
+    if (pincode.isNotEmpty) map[PINCODE_KEY] = pincode;
+    if (phone.isNotEmpty) map[PHONE_KEY] = phone;
     return map;
   }
 }

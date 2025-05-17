@@ -77,7 +77,7 @@ class _ForgotPasswordFormState extends State<ForgotPasswordForm> {
       _formKey.currentState?.save();
       final String emailInput = emailFieldController.text.trim();
       bool resultStatus;
-      String snackbarMessage;
+      String snackbarMessage = '';
       try {
         final resultFuture =
             AuthentificationService().resetPasswordForEmail(emailInput);
@@ -103,8 +103,6 @@ class _ForgotPasswordFormState extends State<ForgotPasswordForm> {
       } catch (e) {
         snackbarMessage = e.toString();
       } finally {
-        String snackbarMessage = '';
-
         Logger().i(snackbarMessage);
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(

@@ -142,10 +142,10 @@ class _ChangePasswordFormState extends State<ChangePasswordForm> {
         print("Current password provided is wrong");
       } else {
         bool updationStatus = false;
-        String snackbarMessage;
+        String snackbarMessage = '';
         try {
           updationStatus = await authService.changePasswordForCurrentUser(
-              newPassword: newPasswordController.text, oldPassword: '');
+              newPassword: newPasswordController.text, oldPassword: currentPasswordController.text);
           if (updationStatus == true) {
             snackbarMessage = "Password changed successfully";
           } else {
@@ -158,8 +158,6 @@ class _ChangePasswordFormState extends State<ChangePasswordForm> {
         } catch (e) {
           snackbarMessage = e.toString();
         } finally {
-          String snackbarMessage = '';
-          
           Logger().i(snackbarMessage);
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(

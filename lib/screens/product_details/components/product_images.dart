@@ -92,7 +92,7 @@ class ProductImages extends StatelessWidget {
                   ? kPrimaryColor
                   : Colors.transparent),
         ),
-        child: Image.network(product.images[index]),
+        child: Image.network("https://heulwen2601.github.io/static-images/wireless_headset.png"),
       ),
     );
   }

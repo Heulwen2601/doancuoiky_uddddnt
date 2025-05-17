@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:path_provider/path_provider.dart';
+import 'dart:convert';
 import 'package:path/path.dart' as path;
 import 'dart:io' show Platform;
 import 'package:flutter/foundation.dart' show kIsWeb;
@@ -57,27 +58,42 @@ Future<String> choseImageFromLocalFiles(
 
   if (imagePicked == null) {
     throw LocalImagePickingInvalidImageException();
+  }
+
+  if (kIsWeb) {
+    final bytes = await imagePicked.readAsBytes();
+    final fileSize = bytes.lengthInBytes;
+
+    if (fileSize > (maxSizeInKB * 1024) || fileSize < (minSizeInKB * 1024)) {
+      throw LocalImagePickingFileSizeOutOfBoundsException(
+          message:
+              "Image size should be between $minSizeInKB KB and $maxSizeInKB KB");
+    }
+
+    final fileExtension = imagePicked.name.split('.').last.toLowerCase();
+    if (!['jpg', 'jpeg', 'png'].contains(fileExtension)) {
+      throw LocalImagePickingInvalidImageException(
+          message: "Unsupported image format: $fileExtension");
+    }
+
+    // Convert to base64 string to use as image src
+    return "data:image/$fileExtension;base64,${base64Encode(bytes)}";
   } else {
     final fileLength = await File(imagePicked.path).length();
+
     if (fileLength > (maxSizeInKB * 1024) ||
         fileLength < (minSizeInKB * 1024)) {
       throw LocalImagePickingFileSizeOutOfBoundsException(
-          message: "Image size should be between $minSizeInKB KB and $maxSizeInKB KB");
+          message:
+              "Image size should be between $minSizeInKB KB and $maxSizeInKB KB");
     }
 
-    // Check file extension (simple format validation)
     final fileExtension = imagePicked.path.split('.').last.toLowerCase();
     if (!['jpg', 'jpeg', 'png'].contains(fileExtension)) {
       throw LocalImagePickingInvalidImageException(
           message: "Unsupported image format: $fileExtension");
     }
 
-    // Avoid file operations on web
-    if (kIsWeb) {
-      return imagePicked.path; // or handle base64 upload etc.
-    }
-
-    // Save to app directory (non-web only)
     final appDir = await getApplicationDocumentsDirectory();
     final fileName = path.basename(imagePicked.path);
     final savedImagePath = path.join(appDir.path, fileName);

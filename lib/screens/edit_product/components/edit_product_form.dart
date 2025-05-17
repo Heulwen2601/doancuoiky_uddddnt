@@ -567,7 +567,7 @@ class _EditProductFormState extends State<EditProductForm> {
       return;
     }
     String? productId;
-    String snackbarMessage;
+    String snackbarMessage = '';
     try {
       product.productType = productDetails.productType;
       product.searchTags = productDetails.searchTags;
@@ -599,8 +599,6 @@ class _EditProductFormState extends State<EditProductForm> {
       Logger().w("Unknown Exception: $e");
       snackbarMessage = e.toString();
     } finally {
-      String snackbarMessage = '';
-
       Logger().i(snackbarMessage);
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(

@@ -150,7 +150,7 @@ class _BodyState extends State<Body> {
 
     if (confirmDeletion) {
       bool status = false;
-      String snackbarMessage;
+      String snackbarMessage = '';
       try {
         status =
             await UserDatabaseHelper().deleteAddressForCurrentUser(addressId);
@@ -166,8 +166,6 @@ class _BodyState extends State<Body> {
         Logger().w("Unknown Exception: $e");
         snackbarMessage = e.toString();
       } finally {
-        String snackbarMessage = '';
-        
         Logger().i(snackbarMessage);
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(

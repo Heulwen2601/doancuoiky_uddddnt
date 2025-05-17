@@ -247,7 +247,7 @@ class _BodyState extends State<Body> {
                       );
                       if (result is Review) {
                         bool reviewAdded = false;
-                        String snackbarMessage;
+                        String snackbarMessage = '';
                         try {
                           reviewAdded = await ProductDatabaseHelper()
                               .addProductReview(product.id, result);
@@ -264,8 +264,6 @@ class _BodyState extends State<Body> {
                           Logger().w("Unknown Exception: $e");
                           snackbarMessage = e.toString();
                         } finally {
-                          String snackbarMessage = '';
-
                           Logger().i(snackbarMessage);
                           ScaffoldMessenger.of(context).showSnackBar(
                             SnackBar(

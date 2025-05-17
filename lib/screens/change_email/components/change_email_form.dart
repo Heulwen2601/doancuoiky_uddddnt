@@ -150,7 +150,7 @@ class _ChangeEmailFormState extends State<ChangeEmailForm> {
           await authService.verifyCurrentUserPassword(passwordController.text);
       if (passwordValidation) {
         bool updationStatus = false;
-        String snackbarMessage;
+        String snackbarMessage = '';
         try {
           updationStatus = await authService.changeEmailForCurrentUser(
               newEmail: newEmailController.text, password: '');
@@ -167,8 +167,6 @@ class _ChangeEmailFormState extends State<ChangeEmailForm> {
         } catch (e) {
           snackbarMessage = e.toString();
         } finally {
-          String snackbarMessage = '';
-          
           Logger().i(snackbarMessage);
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(

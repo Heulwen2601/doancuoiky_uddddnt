@@ -136,7 +136,7 @@ class _SignUpFormState extends State<SignUpForm> {
       // goto complete profile page
       final AuthentificationService authService = AuthentificationService();
       bool signUpStatus = false;
-      String snackbarMessage;
+      String snackbarMessage = '';
       try {
         final signUpFuture = authService.signUp(
           email: emailFieldController.text,
@@ -163,8 +163,6 @@ class _SignUpFormState extends State<SignUpForm> {
       } catch (e) {
         snackbarMessage = e.toString();
       } finally {
-        String snackbarMessage = '';
-        
         Logger().i(snackbarMessage);
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(

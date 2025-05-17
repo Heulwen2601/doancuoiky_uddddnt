@@ -8,12 +8,12 @@ class CartItem extends Model {
   CartItem({
     String? id,
     this.itemCount = 0,
-  }) : super(id!);
+  }) : super(id ?? '');
 
   factory CartItem.fromMap(Map<String, dynamic> map, {String? id}) {
     return CartItem(
       id: id,
-      itemCount: map[ITEM_COUNT_KEY],
+      itemCount: map[ITEM_COUNT_KEY]  ?? 0,
     );
   }
 

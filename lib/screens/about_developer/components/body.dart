@@ -56,7 +56,25 @@ class Body extends StatelessWidget {
                   ),
                 ),
                 SizedBox(height: getProportionateScreenHeight(30)),
-                
+                Row(
+                  children: [
+                    Spacer(),
+                    IconButton(
+                      icon: SvgPicture.asset(
+                        "assets/icons/github_icon.svg",
+                        color: kTextColor.withOpacity(0.75),
+                      ),
+                      color: kTextColor.withOpacity(0.75),
+                      iconSize: 40,
+                      padding: EdgeInsets.all(16),
+                      onPressed: () async {
+                        const String githubUrl = "https://github.com/Heulwen2601/doancuoiky_uddddnt.git";
+                        await launchUrl(githubUrl);
+                      },
+                    ),
+                    Spacer(),
+                  ],
+                ),
                 SizedBox(height: getProportionateScreenHeight(50)),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -166,7 +184,7 @@ class Body extends StatelessWidget {
     if (result != null) {
       result.liked = liked;
       bool reviewAdded = false;
-      String snackbarMessage;
+      String snackbarMessage = '';
       try {
         reviewAdded = await AppReviewDatabaseHelper().editAppReview(result);
         if (reviewAdded == true) {
@@ -181,7 +199,6 @@ class Body extends StatelessWidget {
         Logger().w("Unknown Exception: $e");
         snackbarMessage = e.toString();
       } finally {
-        String snackbarMessage = '';
         Logger().i(snackbarMessage);
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(

@@ -69,7 +69,7 @@ class _ChangePhoneNumberFormState extends State<ChangePhoneNumberForm> {
       _formKey.currentState?.save();
 
       bool status = false;
-      String snackbarMessage;
+      String snackbarMessage = '';
       try {
         status = await UserDatabaseHelper()
             .updatePhoneForCurrentUser(newPhoneNumberController.text);
@@ -85,8 +85,6 @@ class _ChangePhoneNumberFormState extends State<ChangePhoneNumberForm> {
         Logger().w("Unknown Exception: $e");
         snackbarMessage = "Something went wrong";
       } finally {
-        String snackbarMessage = '';
-
         Logger().i(snackbarMessage);
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(

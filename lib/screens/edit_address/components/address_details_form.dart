@@ -310,9 +310,9 @@ class _AddressDetailsFormState extends State<AddressDetailsForm> {
   Future<void> saveNewAddressButtonCallback() async {
     if (_formKey.currentState?.validate() ?? false) {
       _formKey.currentState?.save();
-      final Address newAddress = generateAddressObject();
+      final Address newAddress = generateAddressObject(id: '');
       bool status = false;
-      String snackbarMessage;
+      String snackbarMessage = '';
       try {
         status =
             await UserDatabaseHelper().addAddressForCurrentUser(newAddress);
@@ -328,8 +328,6 @@ class _AddressDetailsFormState extends State<AddressDetailsForm> {
         Logger().w("Unknown Exception: $e");
         snackbarMessage = "Something went wrong";
       } finally {
-        String snackbarMessage = '';
-
         Logger().i(snackbarMessage);
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
@@ -347,7 +345,7 @@ class _AddressDetailsFormState extends State<AddressDetailsForm> {
           generateAddressObject(id: widget.addressToEdit!.id);
 
       bool status = false;
-      String snackbarMessage;
+      String snackbarMessage = '';
       try {
         status =
             await UserDatabaseHelper().updateAddressForCurrentUser(newAddress);
@@ -363,8 +361,6 @@ class _AddressDetailsFormState extends State<AddressDetailsForm> {
         Logger().w("Unknown Exception: $e");
         snackbarMessage = "Something went wrong";
       } finally {
-        String snackbarMessage = '';
-        
         Logger().i(snackbarMessage);
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
@@ -375,9 +371,9 @@ class _AddressDetailsFormState extends State<AddressDetailsForm> {
     }
   }
 
-  Address generateAddressObject({String? id}) {
+  Address generateAddressObject({required String id}) {
     return Address(
-      id!,
+      id: id,
       title: titleFieldController.text,
       receiver: receiverFieldController.text,
       addresLine1: addressLine1FieldController.text,
@@ -390,4 +386,5 @@ class _AddressDetailsFormState extends State<AddressDetailsForm> {
       phone: phoneFieldController.text,
     );
   }
+
 }

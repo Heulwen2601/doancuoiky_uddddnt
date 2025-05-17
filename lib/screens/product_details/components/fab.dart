@@ -42,7 +42,7 @@ class AddToCartFAB extends StatelessWidget {
           return;
         }
         bool addedSuccessfully = false;
-        String snackbarMessage;
+        String snackbarMessage  = '';
         try {
           addedSuccessfully =
               await UserDatabaseHelper().addProductToCart(productId);
@@ -58,8 +58,6 @@ class AddToCartFAB extends StatelessWidget {
           Logger().w("Unknown Exception: $e");
           snackbarMessage = "Something went wrong";
         } finally {
-          String snackbarMessage = '';
-          
           Logger().i(snackbarMessage);
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(

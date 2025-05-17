@@ -128,7 +128,7 @@ class _SignInFormState extends State<SignInForm> {
       _formkey.currentState?.save();
       final AuthentificationService authService = AuthentificationService();
       bool signInStatus = false;
-      String snackbarMessage;
+      String snackbarMessage = '';
       try {
         final signInFuture = authService.signIn(
           email: emailFieldController.text.trim(),
@@ -163,8 +163,6 @@ class _SignInFormState extends State<SignInForm> {
       } catch (e) {
         snackbarMessage = e.toString();
       } finally {
-        String snackbarMessage = '';
-
         Logger().i(snackbarMessage);
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
