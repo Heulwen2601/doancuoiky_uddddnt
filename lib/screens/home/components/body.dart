@@ -36,18 +36,18 @@ class _BodyState extends State<Body> {
     },
     <String, dynamic>{
       ICON_KEY: "assets/icons/Gaming_chair.svg",
-      TITLE_KEY: "Gaming chair",
+      TITLE_KEY: "Gaming_chair",
       PRODUCT_TYPE_KEY: ProductType.Gaming_chair,
     },
     <String, dynamic>{
       ICON_KEY: "assets/icons/Tech_cleaning_kit.svg",
-      TITLE_KEY: "Technology cleaning kit",
+      TITLE_KEY: "Technology_cleaning_kit",
       PRODUCT_TYPE_KEY: ProductType.Tech_cleaning_kit,
     },
     <String, dynamic>{
       ICON_KEY: "assets/icons/Rgb_lighting.svg",
-      TITLE_KEY: "RGB lighting",
-      PRODUCT_TYPE_KEY: ProductType.Rgb_lighting,
+      TITLE_KEY: "RGB_lighting",
+      PRODUCT_TYPE_KEY: ProductType.RGB_lighting,
     },
     <String, dynamic>{
       ICON_KEY: "assets/icons/Accessories.svg",

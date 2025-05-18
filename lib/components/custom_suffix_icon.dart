@@ -15,9 +15,9 @@ class CustomSuffixIcon extends StatelessWidget {
     return Padding(
       padding: EdgeInsets.fromLTRB(
         0,
-        getProportionateScreenWidth(20),
-        getProportionateScreenWidth(20),
-        getProportionateScreenWidth(20),
+        getProportionateScreenWidth(10),
+        getProportionateScreenWidth(10),
+        getProportionateScreenWidth(10),
       ),
       child: SvgPicture.asset(
         svgIcon,

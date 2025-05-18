@@ -16,7 +16,7 @@ class NoAccountText extends StatelessWidget {
         Text(
           "Don't have an account? ",
           style: TextStyle(
-            fontSize: getProportionateScreenWidth(16),
+            fontSize: getProportionateScreenWidth(10),
           ),
         ),
         GestureDetector(
@@ -27,7 +27,7 @@ class NoAccountText extends StatelessWidget {
           child: Text(
             "Sign Up",
             style: TextStyle(
-              fontSize: getProportionateScreenWidth(16),
+              fontSize: getProportionateScreenWidth(10),
               color: kPrimaryColor,
             ),
           ),

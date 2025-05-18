@@ -27,7 +27,7 @@ class Body extends StatefulWidget {
 
 class _BodyState extends State<Body> {
   final CartItemsStream cartItemsStream = CartItemsStream();
-  late PersistentBottomSheetController bottomSheetHandler;
+  PersistentBottomSheetController? bottomSheetHandler;
   @override
   void initState() {
     super.initState();
@@ -429,7 +429,8 @@ class _BodyState extends State<Body> {
 
   void shutBottomSheet() {
     if (bottomSheetHandler != null) {
-      bottomSheetHandler.close();
+      bottomSheetHandler!.close();
+      bottomSheetHandler = null;
     }
   }
 

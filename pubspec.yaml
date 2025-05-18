@@ -45,6 +45,7 @@ dependencies:
   # flutter_tags: ^0.4.9+1
   future_progress_dialog: ^0.2.1 
   image_picker: ^1.1.2
+  image_picker_web: ^4.0.0 
   intl: ^0.20.2
   logger: ^2.5.0
   permission_handler: ^12.0.0+1 
@@ -55,6 +56,7 @@ dependencies:
   url_launcher: ^6.3.1
   file_picker: ^10.1.8
   path_provider: ^2.1.5
+  cloud_functions: ^5.5.0
 
 dev_dependencies:
   flutter_test:
@@ -90,6 +92,7 @@ flutter:
   assets:
     - assets/images/
     - assets/icons/
+    - assets/images/ava.jpg
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/to/resolution-aware-images

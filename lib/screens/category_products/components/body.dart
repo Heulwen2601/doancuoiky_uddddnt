@@ -259,7 +259,7 @@ class _BodyState extends State<Body> {
         return "assets/images/gaming_chair_banner.jpg";
       case ProductType.Tech_cleaning_kit:
         return "assets/images/tech_cleaning_kit_banner.jpg";
-      case ProductType.Rgb_lighting:
+      case ProductType.RGB_lighting:
         return "assets/images/rgb_lighting_banner.jpg";
       case ProductType.Accessories:
         return "assets/images/accessories_banner.jpg";

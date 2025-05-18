@@ -1,19 +1,16 @@
-import 'dart:io';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:do_an_ck_uddddnt/components/async_progress_dialog.dart';
 import 'package:do_an_ck_uddddnt/components/default_button.dart';
 import 'package:do_an_ck_uddddnt/constants.dart';
-import 'package:do_an_ck_uddddnt/exceptions/local_files_handling/image_picking_exceptions.dart';
-import 'package:do_an_ck_uddddnt/exceptions/local_files_handling/local_file_handling_exception.dart';
 import 'package:do_an_ck_uddddnt/services/database/user_database_helper.dart';
 import 'package:do_an_ck_uddddnt/services/firestore_files_access/firestore_files_access_service.dart';
-import 'package:do_an_ck_uddddnt/services/local_files_access/local_files_access_service.dart';
 import 'package:do_an_ck_uddddnt/size_config.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:do_an_ck_uddddnt/services/database/image_picker_helper.dart';
 import 'package:logger/logger.dart';
 import 'package:provider/provider.dart';
 import '../provider_models/body_model.dart';
-import 'package:future_progress_dialog/future_progress_dialog.dart';
 
 class Body extends StatelessWidget {
   @override
@@ -67,55 +64,54 @@ class Body extends StatelessWidget {
       stream: UserDatabaseHelper().currentUserDataStream,
       builder: (context, snapshot) {
         if (snapshot.hasError) {
-          final error = snapshot.error;
-          Logger().w(error.toString());
+          Logger().w(snapshot.error.toString());
+          return CircleAvatar(
+            radius: SizeConfig.screenWidth * 0.3,
+            backgroundColor: kTextColor.withOpacity(0.5),
+          );
         }
+
         ImageProvider? backImage;
-        if (bodyState.chosenImage != null) {
-          backImage = MemoryImage(bodyState.chosenImage.readAsBytesSync());
-        } else if (snapshot.hasData && snapshot.data?.data() is Map<String, dynamic>) {
-          final data = snapshot.data?.data() as Map<String, dynamic>;
-          final String url = data[UserDatabaseHelper.DP_KEY];
-          if (url != null) backImage = NetworkImage(url);
+
+        if (bodyState.imageBytes != null) {
+          backImage = MemoryImage(bodyState.imageBytes!);
+        } else if (snapshot.hasData && snapshot.data is DocumentSnapshot) {
+          final docSnapshot = snapshot.data as DocumentSnapshot;
+          final data = docSnapshot.data() as Map<String, dynamic>?;
+          final String? url = data?[UserDatabaseHelper.DP_KEY];
+          if (url != null) {
+            backImage = NetworkImage(url);
+          }
         }
+
         return CircleAvatar(
           radius: SizeConfig.screenWidth * 0.3,
           backgroundColor: kTextColor.withOpacity(0.5),
-          backgroundImage: backImage ?? null,
+          backgroundImage: backImage,
         );
-      },
+      }
     );
   }
 
-  void getImageFromUser(BuildContext context, ChosenImage bodyState) async {
-    String? path;
-    String snackbarMessage = '';
+  Future<void> getImageFromUser(BuildContext context, ChosenImage bodyState) async {
     try {
-      path = await choseImageFromLocalFiles(context);
-      if (path == null) {
-        throw LocalImagePickingUnknownReasonFailureException();
-      }
-    } on LocalFileHandlingException catch (e) {
-      Logger().i("LocalFileHandlingException: $e");
-      snackbarMessage = e.toString();
-    } catch (e) {
-      Logger().i("LocalFileHandlingException: $e");
-      snackbarMessage = e.toString();
-    } finally {
-      if (snackbarMessage != null) {
-        Logger().i(snackbarMessage);
+      final bytes = await pickImage(context);
+
+      if (bytes == null) {
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text(snackbarMessage),
-          ),
+          SnackBar(content: Text("No image selected.")),
         );
+        return;
       }
+
+      bodyState.imageBytes = bytes;
+    } catch (e) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text("Error: ${e.toString()}")),
+      );
     }
-    if (path == null) {
-      return;
-    }
-    bodyState.setChosenImage = File(path);
   }
+
 
   Widget buildChosePictureButton(BuildContext context, ChosenImage bodyState) {
     return DefaultButton(
@@ -152,9 +148,10 @@ class Body extends StatelessWidget {
     bool uploadDisplayPictureStatus = false;
     String snackbarMessage = '';
     try {
-      final downloadUrl = await FirestoreFilesAccess().uploadFileToPath(
-          bodyState.chosenImage,
-          UserDatabaseHelper().getPathForCurrentUserDisplayPicture());
+      final downloadUrl = await FirestoreFilesAccess().uploadBytesToPath(
+        bodyState.imageBytes!,
+        UserDatabaseHelper().getPathForCurrentUserDisplayPicture(),
+      );
 
       uploadDisplayPictureStatus = await UserDatabaseHelper()
           .uploadDisplayPictureForCurrentUser(downloadUrl);

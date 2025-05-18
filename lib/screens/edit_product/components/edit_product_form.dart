@@ -12,7 +12,6 @@ import 'package:do_an_ck_uddddnt/services/firestore_files_access/firestore_files
 import 'package:do_an_ck_uddddnt/services/local_files_access/local_files_access_service.dart';
 import 'package:enum_to_string/enum_to_string.dart';
 import 'package:flutter/material.dart';
-// import 'package:flutter_tags/flutter_tags.dart';
 import 'package:future_progress_dialog/future_progress_dialog.dart';
 import 'package:logger/logger.dart';
 import 'package:provider/provider.dart';
@@ -21,10 +20,11 @@ import '../../../constants.dart';
 import '../../../size_config.dart';
 
 class EditProductForm extends StatefulWidget {
-  final Product product;
+  final Product? product; // cho phép null khi tạo sản phẩm mới
+
   EditProductForm({
     Key? key,
-    required this.product,
+    this.product,
   }) : super(key: key);
 
   @override
@@ -34,18 +34,13 @@ class EditProductForm extends StatefulWidget {
 class _EditProductFormState extends State<EditProductForm> {
   final _basicDetailsFormKey = GlobalKey<FormState>();
   final _describeProductFormKey = GlobalKey<FormState>();
-  final Set<String> _selectedTags = {};
 
   final TextEditingController titleFieldController = TextEditingController();
   final TextEditingController variantFieldController = TextEditingController();
-  final TextEditingController discountPriceFieldController =
-      TextEditingController();
-  final TextEditingController originalPriceFieldController =
-      TextEditingController();
-  final TextEditingController highlightsFieldController =
-      TextEditingController();
-  final TextEditingController desciptionFieldController =
-      TextEditingController();
+  final TextEditingController discountPriceFieldController = TextEditingController();
+  final TextEditingController originalPriceFieldController = TextEditingController();
+  final TextEditingController highlightsFieldController = TextEditingController();
+  final TextEditingController descriptionFieldController = TextEditingController();
   final TextEditingController sellerFieldController = TextEditingController();
 
   bool newProduct = true;
@@ -58,77 +53,209 @@ class _EditProductFormState extends State<EditProductForm> {
     discountPriceFieldController.dispose();
     originalPriceFieldController.dispose();
     highlightsFieldController.dispose();
-    desciptionFieldController.dispose();
+    descriptionFieldController.dispose();
     sellerFieldController.dispose();
-
     super.dispose();
   }
 
   @override
   void initState() {
     super.initState();
+
     if (widget.product == null) {
+      // Tạo product mặc định cho sản phẩm mới
       product = Product(
         '0',
         productType: ProductType.Computers,
         images: [],
-        title: 'Default Product',
-        variant: 'Default Variant',
+        title: '',
+        variant: '',
         discountPrice: 0.0,
         originalPrice: 0.0,
         rating: 0.0,
-        highlights: 'No highlights',
-        description: 'No description available',
-        seller: 'Unknown',
-        owner: 'Unknown',
+        highlights: '',
+        description: '',
+        seller: '',
+        owner: '',
         searchTags: [],
       );
       newProduct = true;
     } else {
-      product = widget.product;
+      product = widget.product!;
       newProduct = false;
-      final productDetails =
-          Provider.of<ProductDetails>(context, listen: false);
-      productDetails.initialSelectedImages = widget.product.images
-          .map((e) => CustomImage(imgType: ImageType.network, path: e))
-          .toList();
-      productDetails.initialProductType = product.productType;
-      productDetails.initSearchTags = product.searchTags ?? [];
     }
+
+    // Set các giá trị controller 1 lần lúc initState
+    titleFieldController.text = product.title;
+    variantFieldController.text = product.variant;
+    discountPriceFieldController.text = product.discountPrice.toString();
+    originalPriceFieldController.text = product.originalPrice.toString();
+    highlightsFieldController.text = product.highlights;
+    descriptionFieldController.text = product.description;
+    sellerFieldController.text = product.seller;
+
+    // Cập nhật Provider ProductDetails
+    final productDetails = Provider.of<ProductDetails>(context, listen: false);
+    productDetails.initialSelectedImages = product.images
+        .map((e) => CustomImage(imgType: ImageType.network, path: e))
+        .toList();
+    productDetails.initialProductType = product.productType;
+    productDetails.initSearchTags = product.searchTags ?? [];
+    productDetails.title = product.title;
+    productDetails.variant = product.variant;
+    productDetails.discountPrice = product.discountPrice.toDouble();
+    productDetails.originalPrice = product.originalPrice.toDouble();
+    productDetails.highlights = product.highlights;
+    productDetails.description = product.description;
+    productDetails.seller = product.seller;
   }
 
   @override
   Widget build(BuildContext context) {
-    final column = Column(
-      children: [
-        buildBasicDetailsTile(context),
-        SizedBox(height: getProportionateScreenHeight(10)),
-        buildDescribeProductTile(context),
-        SizedBox(height: getProportionateScreenHeight(10)),
-        buildUploadImagesTile(context),
-        SizedBox(height: getProportionateScreenHeight(20)),
-        buildProductTypeDropdown(),
-        SizedBox(height: getProportionateScreenHeight(20)),
-        buildProductSearchTagsTile(),
-        SizedBox(height: getProportionateScreenHeight(80)),
-        DefaultButton(
+    return SingleChildScrollView(
+      padding: EdgeInsets.all(16),
+      child: Column(
+        children: [
+          buildBasicDetailsTile(context),
+          SizedBox(height: 10),
+          buildDescribeProductTile(context),
+          SizedBox(height: 10),
+          buildUploadImagesTile(context),
+          SizedBox(height: 20),
+          buildProductTypeDropdown(),
+          SizedBox(height: 20),
+          buildProductSearchTagsTile(),
+          SizedBox(height: 80),
+          DefaultButton(
             text: "Save Product",
-            press: () {
-              saveProductButtonCallback(context);
-            }),
-        SizedBox(height: getProportionateScreenHeight(10)),
+            press: () => saveProductButtonCallback(context),
+          ),
+          SizedBox(height: 10),
+        ],
+      ),
+    );
+  }
+
+  Widget buildBasicDetailsTile(BuildContext context) {
+    return Form(
+      key: _basicDetailsFormKey,
+      child: ExpansionTile(
+        maintainState: true,
+        title: Text(
+          "Basic Details",
+          style: Theme.of(context).textTheme.titleLarge,
+        ),
+        leading: Icon(Icons.shop),
+        childrenPadding: EdgeInsets.symmetric(vertical: 20),
+        children: [
+          buildTitleField(),
+          SizedBox(height: 20),
+          buildVariantField(),
+          SizedBox(height: 20),
+          buildOriginalPriceField(),
+          SizedBox(height: 20),
+          buildDiscountPriceField(),
+          SizedBox(height: 20),
+          buildSellerField(),
+          SizedBox(height: 20),
+        ],
+      ),
+    );
+  }
+
+  bool validateBasicDetailsForm() {
+    if (_basicDetailsFormKey.currentState?.validate() ?? false) {
+      _basicDetailsFormKey.currentState?.save();
+      product.title = titleFieldController.text;
+      product.variant = variantFieldController.text;
+      product.originalPrice = double.tryParse(originalPriceFieldController.text) ?? 0.0;
+      product.discountPrice = double.tryParse(discountPriceFieldController.text) ?? 0.0;
+      product.seller = sellerFieldController.text;
+      return true;
+    }
+    return false;
+  }
+
+  Widget buildDescribeProductTile(BuildContext context) {
+    return Form(
+      key: _describeProductFormKey,
+      child: ExpansionTile(
+        maintainState: true,
+        title: Text(
+          "Describe Product",
+          style: Theme.of(context).textTheme.titleLarge,
+        ),
+        leading: Icon(Icons.description),
+        childrenPadding: EdgeInsets.symmetric(vertical: 20),
+        children: [
+          buildHighlightsField(),
+          SizedBox(height: 20),
+          buildDescriptionField(),
+          SizedBox(height: 20),
+        ],
+      ),
+    );
+  }
+
+  bool validateDescribeProductForm() {
+    if (_describeProductFormKey.currentState?.validate() ?? false) {
+      _describeProductFormKey.currentState?.save();
+      product.highlights = highlightsFieldController.text;
+      product.description = descriptionFieldController.text;
+      return true;
+    }
+    return false;
+  }
+
+  Widget buildProductTypeDropdown() {
+    return Container(
+      padding: EdgeInsets.symmetric(horizontal: 24, vertical: 6),
+      decoration: BoxDecoration(
+        border: Border.all(color: Colors.black54, width: 1),
+        borderRadius: BorderRadius.all(Radius.circular(28)),
+      ),
+      child: Consumer<ProductDetails>(
+        builder: (context, productDetails, child) {
+          return DropdownButton<ProductType>(
+            value: productDetails.productType,
+            items: ProductType.values
+                .map(
+                  (e) => DropdownMenuItem(
+                    value: e,
+                    child: Text(e.toString().split('.').last),
+                  ),
+                )
+                .toList(),
+            hint: Text("Choose Product Type"),
+            style: TextStyle(
+              color: Colors.black87,
+              fontSize: 16,
+            ),
+            onChanged: (value) {
+              productDetails.productType = value!;
+            },
+            elevation: 0,
+            underline: SizedBox(),
+          );
+        },
+      ),
+    );
+  }
+
+  Widget buildProductSearchTagsTile() {
+    return ExpansionTile(
+      title: Text(
+        "Search Tags",
+        style: Theme.of(context).textTheme.titleLarge,
+      ),
+      leading: Icon(Icons.check_circle_sharp),
+      childrenPadding: EdgeInsets.symmetric(vertical: 20),
+      children: [
+        Text("Your product will be searched for these Tags"),
+        SizedBox(height: 15),
+        buildProductSearchTags(),
       ],
     );
-    if (newProduct == false) {
-      titleFieldController.text = product.title;
-      variantFieldController.text = product.variant;
-      discountPriceFieldController.text = product.discountPrice.toString();
-      originalPriceFieldController.text = product.originalPrice.toString();
-      highlightsFieldController.text = product.highlights;
-      desciptionFieldController.text = product.description;
-      sellerFieldController.text = product.seller;
-    }
-    return column;
   }
 
   Widget buildProductSearchTags() {
@@ -139,7 +266,6 @@ class _EditProductFormState extends State<EditProductForm> {
         return Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            // TextField để nhập tag mới
             Row(
               children: [
                 Expanded(
@@ -171,7 +297,6 @@ class _EditProductFormState extends State<EditProductForm> {
               ],
             ),
             SizedBox(height: 12),
-            // Hiển thị danh sách tag
             Wrap(
               spacing: 8,
               runSpacing: 4,
@@ -187,147 +312,10 @@ class _EditProductFormState extends State<EditProductForm> {
                   },
                 );
               }).toList(),
-            )
+            ),
           ],
         );
       },
-    );
-  }
-
-
-  Widget buildBasicDetailsTile(BuildContext context) {
-    return Form(
-      key: _basicDetailsFormKey,
-      child: ExpansionTile(
-        maintainState: true,
-        title: Text(
-          "Basic Details",
-          style: Theme.of(context).textTheme.titleLarge,
-        ),
-        leading: Icon(
-          Icons.shop,
-        ),
-        childrenPadding:
-            EdgeInsets.symmetric(vertical: getProportionateScreenHeight(20)),
-        children: [
-          buildTitleField(),
-          SizedBox(height: getProportionateScreenHeight(20)),
-          buildVariantField(),
-          SizedBox(height: getProportionateScreenHeight(20)),
-          buildOriginalPriceField(),
-          SizedBox(height: getProportionateScreenHeight(20)),
-          buildDiscountPriceField(),
-          SizedBox(height: getProportionateScreenHeight(20)),
-          buildSellerField(),
-          SizedBox(height: getProportionateScreenHeight(20)),
-        ],
-      ),
-    );
-  }
-
-  bool validateBasicDetailsForm() {
-    if (_basicDetailsFormKey.currentState?.validate() ?? false) {
-      _basicDetailsFormKey.currentState?.save();
-      product.title = titleFieldController.text;
-      product.variant = variantFieldController.text;
-      product.originalPrice = double.parse(originalPriceFieldController.text);
-      product.discountPrice = double.parse(discountPriceFieldController.text);
-      product.seller = sellerFieldController.text;
-      return true;
-    }
-    return false;
-  }
-
-  Widget buildDescribeProductTile(BuildContext context) {
-    return Form(
-      key: _describeProductFormKey,
-      child: ExpansionTile(
-        maintainState: true,
-        title: Text(
-          "Describe Product",
-          style: Theme.of(context).textTheme.titleLarge,
-        ),
-        leading: Icon(
-          Icons.description,
-        ),
-        childrenPadding:
-            EdgeInsets.symmetric(vertical: getProportionateScreenHeight(20)),
-        children: [
-          buildHighlightsField(),
-          SizedBox(height: getProportionateScreenHeight(20)),
-          buildDescriptionField(),
-          SizedBox(height: getProportionateScreenHeight(20)),
-        ],
-      ),
-    );
-  }
-
-  bool validateDescribeProductForm() {
-    if (_describeProductFormKey.currentState?.validate() ?? false) {
-      _describeProductFormKey.currentState?.save();
-      product.highlights = highlightsFieldController.text;
-      product.description = desciptionFieldController.text;
-      return true;
-    }
-    return false;
-  }
-
-  Widget buildProductTypeDropdown() {
-    return Container(
-      padding: EdgeInsets.symmetric(
-        horizontal: 24,
-        vertical: 6,
-      ),
-      decoration: BoxDecoration(
-        border: Border.all(color: kTextColor, width: 1),
-        borderRadius: BorderRadius.all(Radius.circular(28)),
-      ),
-      child: Consumer<ProductDetails>(
-        builder: (context, productDetails, child) {
-          return DropdownButton(
-            value: productDetails.productType,
-            items: ProductType.values
-                .map(
-                  (e) => DropdownMenuItem(
-                    value: e,
-                    child: Text(
-                      EnumToString.convertToString(e),
-                    ),
-                  ),
-                )
-                .toList(),
-            hint: Text(
-              "Chose Product Type",
-            ),
-            style: TextStyle(
-              color: kTextColor,
-              fontSize: 16,
-            ),
-            onChanged: (value) {
-              productDetails.productType = value!;
-            },
-            elevation: 0,
-            underline: SizedBox(width: 0, height: 0),
-          );
-        },
-      ),
-    );
-  }
-
-  Widget buildProductSearchTagsTile() {
-    return ExpansionTile(
-      title: Text(
-        "Search Tags",
-        style: Theme.of(context).textTheme.titleLarge,
-      ),
-      leading: Icon(Icons.check_circle_sharp),
-      childrenPadding:
-          EdgeInsets.symmetric(vertical: getProportionateScreenHeight(20)),
-      children: [
-        Text("Your product will be searched for this Tags"),
-        SizedBox(height: getProportionateScreenHeight(15)),
-        buildProductSearchTags(),
-      ],
     );
   }
 
@@ -338,48 +326,43 @@ class _EditProductFormState extends State<EditProductForm> {
         style: Theme.of(context).textTheme.titleLarge,
       ),
       leading: Icon(Icons.image),
-      childrenPadding:
-          EdgeInsets.symmetric(vertical: getProportionateScreenHeight(20)),
+      childrenPadding: EdgeInsets.symmetric(vertical: 20),
       children: [
         Padding(
           padding: const EdgeInsets.all(16.0),
           child: IconButton(
-              icon: Icon(
-                Icons.add_a_photo,
-              ),
-              color: kTextColor,
-              onPressed: () {
-                addImageButtonCallback(index: 1);
-              }),
+            icon: Icon(Icons.add_a_photo),
+            color: Colors.black87,
+            onPressed: () {
+              addImageButtonCallback(index: null);
+            },
+          ),
         ),
         Consumer<ProductDetails>(
           builder: (context, productDetails, child) {
             return Row(
               mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                ...List.generate(
-                  productDetails.selectedImages.length,
-                  (index) => SizedBox(
-                    width: 80,
-                    height: 80,
-                    child: Padding(
-                      padding: const EdgeInsets.all(5.0),
-                      child: GestureDetector(
-                        onTap: () {
-                          addImageButtonCallback(index: index);
-                        },
-                        child: productDetails.selectedImages[index].imgType ==
-                                ImageType.local
-                            ? Image.memory(
-                                File(productDetails.selectedImages[index].path)
-                                    .readAsBytesSync())
-                            : Image.network(
-                                productDetails.selectedImages[index].path),
-                      ),
+              children: List.generate(
+                productDetails.selectedImages.length,
+                (index) => SizedBox(
+                  width: 80,
+                  height: 80,
+                  child: Padding(
+                    padding: const EdgeInsets.all(5.0),
+                    child: GestureDetector(
+                      onTap: () {
+                        addImageButtonCallback(index: index);
+                      },
+                      child: productDetails.selectedImages[index].imgType ==
+                              ImageType.local
+                          ? Image.memory(
+                              File(productDetails.selectedImages[index].path)
+                                  .readAsBytesSync())
+                          : Image.network(productDetails.selectedImages[index].path),
                     ),
                   ),
                 ),
-              ],
+              ),
             );
           },
         ),
@@ -430,8 +413,7 @@ class _EditProductFormState extends State<EditProductForm> {
       controller: highlightsFieldController,
       keyboardType: TextInputType.multiline,
       decoration: InputDecoration(
-        hintText:
-            "e.g., Intel i9 Processor | RTX 4090 Graphics Card | 32GB RAM, 2TB SSD",
+        hintText: "e.g., Intel i9 Processor | RTX 4090 Graphics Card | 32GB RAM, 2TB SSD",
         labelText: "Highlights",
         floatingLabelBehavior: FloatingLabelBehavior.always,
       ),
@@ -448,16 +430,16 @@ class _EditProductFormState extends State<EditProductForm> {
 
   Widget buildDescriptionField() {
     return TextFormField(
-      controller: desciptionFieldController,
+      controller: descriptionFieldController,
       keyboardType: TextInputType.multiline,
       decoration: InputDecoration(
         hintText:
-            "e.g., The Raptor X9 is a powerhouse designed for ultimate gaming and productivity. Equipped with the latest Intel i9 processor and the powerful RTX 4090, it handles all your gaming and professional needs effortlessly.",
+            "e.g., The Raptor X9 is a powerhouse designed for ultimate gaming and productivity. Equipped with the latest Intel i9 processor and the powerful RTX 4090...",
         labelText: "Description",
         floatingLabelBehavior: FloatingLabelBehavior.always,
       ),
       validator: (_) {
-        if (desciptionFieldController.text.isEmpty) {
+        if (descriptionFieldController.text.isEmpty) {
           return FIELD_REQUIRED_MSG;
         }
         return null;
@@ -499,6 +481,9 @@ class _EditProductFormState extends State<EditProductForm> {
         if (originalPriceFieldController.text.isEmpty) {
           return FIELD_REQUIRED_MSG;
         }
+        if (double.tryParse(originalPriceFieldController.text) == null) {
+          return "Enter a valid number";
+        }
         return null;
       },
       autovalidateMode: AutovalidateMode.onUserInteraction,
@@ -518,6 +503,9 @@ class _EditProductFormState extends State<EditProductForm> {
         if (discountPriceFieldController.text.isEmpty) {
           return FIELD_REQUIRED_MSG;
         }
+        if (double.tryParse(discountPriceFieldController.text) == null) {
+          return "Enter a valid number";
+        }
         return null;
       },
       autovalidateMode: AutovalidateMode.onUserInteraction,
@@ -525,202 +513,141 @@ class _EditProductFormState extends State<EditProductForm> {
   }
 
   Future<void> saveProductButtonCallback(BuildContext context) async {
-    if (validateBasicDetailsForm() == false) {
+    if (!validateBasicDetailsForm()) {
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text("Erros in Basic Details Form"),
-        ),
+        SnackBar(content: Text("Errors in Basic Details Form")),
       );
       return;
     }
-    if (validateDescribeProductForm() == false) {
+
+    if (!validateDescribeProductForm()) {
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text("Errors in Describe Product Form"),
-        ),
+        SnackBar(content: Text("Errors in Describe Product Form")),
       );
       return;
     }
+
     final productDetails = Provider.of<ProductDetails>(context, listen: false);
-    if (productDetails.selectedImages.length < 1) {
+
+    if (productDetails.selectedImages.length < 3) {
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text("Upload atleast One Image of Product"),
-        ),
+        SnackBar(content: Text("Upload at least Three Images of Product")),
       );
       return;
     }
+
     if (productDetails.productType == null) {
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text("Please select Product Type"),
-        ),
+        SnackBar(content: Text("Please select Product Type")),
       );
       return;
     }
+
     if (productDetails.searchTags.length < 3) {
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text("Add atleast 3 search tags"),
-        ),
+        SnackBar(content: Text("Add at least 3 search tags")),
       );
       return;
     }
+
     String? productId;
     String snackbarMessage = '';
+
     try {
-      product.productType = productDetails.productType;
+      product.title = titleFieldController.text;
+      product.variant = variantFieldController.text;
+      product.discountPrice = double.tryParse(discountPriceFieldController.text) ?? 0.0;
+      product.originalPrice = double.tryParse(originalPriceFieldController.text) ?? 0.0;
+      product.highlights = highlightsFieldController.text;
+      product.description = descriptionFieldController.text;
+      product.seller = sellerFieldController.text;
+
+      product.productType = productDetails.productType!;
       product.searchTags = productDetails.searchTags;
+
       final productUploadFuture = newProduct
           ? ProductDatabaseHelper().addUsersProduct(product)
           : ProductDatabaseHelper().updateUsersProduct(product);
-      productUploadFuture.then((value) {
-        productId = value;
-      });
-      await showDialog(
-        context: context,
-        builder: (context) {
-          return AsyncProgressDialog(
-            productUploadFuture,
-            message:
-                Text(newProduct ? "Uploading Product" : "Updating Product"),
-          );
-        },
-      );
-      if (productId != null) {
-        snackbarMessage = "Product Info updated successfully";
-      } else {
+
+      productId = await productUploadFuture;
+
+      if (productId == null) {
         throw "Couldn't update product info due to some unknown issue";
       }
-    } on FirebaseException catch (e) {
-      Logger().w("Firebase Exception: $e");
-      snackbarMessage = "Something went wrong";
+
+      snackbarMessage = "Product Info updated successfully";
     } catch (e) {
-      Logger().w("Unknown Exception: $e");
-      snackbarMessage = e.toString();
-    } finally {
-      Logger().i(snackbarMessage);
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text(snackbarMessage),
-        ),
-      );
+      snackbarMessage = "Something went wrong: $e";
     }
+
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(content: Text(snackbarMessage)),
+    );
+
     if (productId == null) return;
-    bool allImagesUploaded = false;
-    try {
-      allImagesUploaded = await uploadProductImages(productId!);
-      if (allImagesUploaded == true) {
-        snackbarMessage = "All images uploaded successfully";
-      } else {
-        throw "Some images couldn't be uploaded, please try again";
-      }
-    } on FirebaseException catch (e) {
-      Logger().w("Firebase Exception: $e");
-      snackbarMessage = "Something went wrong";
-    } catch (e) {
-      Logger().w("Unknown Exception: $e");
-      snackbarMessage = "Something went wrong";
-    } finally {
-      Logger().i(snackbarMessage);
+
+    bool allImagesUploaded = await uploadProductImages(productId);
+    if (!allImagesUploaded) {
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text(snackbarMessage),
-        ),
+        SnackBar(content: Text("Some images couldn't be uploaded, please try again")),
       );
+      return;
     }
+
+    // Lấy url ảnh
     List<String?> downloadUrls = productDetails.selectedImages
         .map((e) => e.imgType == ImageType.network ? e.path : null)
         .toList();
-    bool productFinalizeUpdate = false;
+
     try {
-      final nonNullDownloadUrls = downloadUrls.whereType<String>().toList();
-      final updateProductFuture =
-          ProductDatabaseHelper().updateProductsImages(productId!, nonNullDownloadUrls);
-      productFinalizeUpdate = await showDialog(
-        context: context,
-        builder: (context) {
-          return AsyncProgressDialog(
-            updateProductFuture,
-            message: Text("Saving Product"),
-          );
-        },
-      );
-      if (productFinalizeUpdate == true) {
-        snackbarMessage = "Product uploaded successfully";
+      final nonNullDownloadUrls = productDetails.selectedImages
+          .map((e) => e.path)
+          .whereType<String>()
+          .toList();
+      bool productFinalizeUpdate = await ProductDatabaseHelper()
+          .updateProductsImages(productId, nonNullDownloadUrls);
+      if (productFinalizeUpdate) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text("Product uploaded successfully")),
+        );
       } else {
         throw "Couldn't upload product properly, please retry";
       }
-    } on FirebaseException catch (e) {
-      Logger().w("Firebase Exception: $e");
-      snackbarMessage = "Something went wrong";
     } catch (e) {
-      Logger().w("Unknown Exception: $e");
-      snackbarMessage = e.toString();
-    } finally {
-      Logger().i(snackbarMessage);
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text(snackbarMessage),
-        ),
+        SnackBar(content: Text("Something went wrong: $e")),
       );
     }
+
     Navigator.pop(context);
   }
 
   Future<bool> uploadProductImages(String productId) async {
-    bool allImagesUpdated = true;
     final productDetails = Provider.of<ProductDetails>(context, listen: false);
+
     for (int i = 0; i < productDetails.selectedImages.length; i++) {
       if (productDetails.selectedImages[i].imgType == ImageType.local) {
-        print("Image being uploaded: " + productDetails.selectedImages[i].path);
-        String? downloadUrl;
         try {
-          final imgUploadFuture = FirestoreFilesAccess().uploadFileToPath(
-              File(productDetails.selectedImages[i].path),
-              ProductDatabaseHelper().getPathForProductImage(productId, i));
-          downloadUrl = await showDialog(
-            context: context,
-            builder: (context) {
-              return AsyncProgressDialog(
-                imgUploadFuture,
-                message: Text(
-                    "Uploading Images ${i + 1}/${productDetails.selectedImages.length}"),
-              );
-            },
-          );
-        } on FirebaseException catch (e) {
-          Logger().w("Firebase Exception: $e");
+          final filePath = productDetails.selectedImages[i].path;
+          final fileName = filePath.split(Platform.pathSeparator).last;
+          final staticUrl = "https://heulwen2601.github.io/static-images/$fileName";
+
+          // Gán lại ảnh từ local sang URL static
+          productDetails.selectedImages[i] =
+              CustomImage(imgType: ImageType.network, path: staticUrl);
         } catch (e) {
-          Logger().w("Firebase Exception: $e");
-        } finally {
-          if (downloadUrl != null) {
-            productDetails.selectedImages[i] =
-                CustomImage(imgType: ImageType.network, path: downloadUrl);
-          } else {
-            allImagesUpdated = false;
-            ScaffoldMessenger.of(context).showSnackBar(
-              SnackBar(
-                content:
-                    Text("Couldn't upload image ${i + 1} due to some issue"),
-              ),
-            );
-          }
+          // Nếu có lỗi thì bỏ qua ảnh này
+          return false;
         }
       }
     }
-    return allImagesUpdated;
+
+    return true;
   }
 
-  Future<void> addImageButtonCallback({required int? index}) async {
-    final productDetails = Provider.of<ProductDetails>(context, listen: false);
 
-    if (index == null && productDetails.selectedImages.length >= 3) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text("Max 3 images can be uploaded")),
-      );
-      return;
-    }
+  Future<void> addImageButtonCallback({int? index}) async {
+    final productDetails = Provider.of<ProductDetails>(context, listen: false);
 
     String? path;
     String? snackbarMessage;
@@ -728,13 +655,9 @@ class _EditProductFormState extends State<EditProductForm> {
     try {
       path = await choseImageFromLocalFiles(context);
       if (path == null) {
-        throw LocalImagePickingUnknownReasonFailureException();
+        throw Exception("Image picking cancelled or failed");
       }
-    } on LocalFileHandlingException catch (e) {
-      Logger().i("Local File Handling Exception: $e");
-      snackbarMessage = e.toString();
     } catch (e) {
-      Logger().i("Unknown Exception: $e");
       snackbarMessage = e.toString();
     }
 
@@ -742,7 +665,7 @@ class _EditProductFormState extends State<EditProductForm> {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text(snackbarMessage)),
       );
-      return; // Nếu có lỗi, dừng tại đây
+      return;
     }
 
     if (path == null) return;
@@ -755,5 +678,4 @@ class _EditProductFormState extends State<EditProductForm> {
       productDetails.setSelectedImageAtIndex(newImage, index);
     }
   }
-
 }

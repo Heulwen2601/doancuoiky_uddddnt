@@ -117,26 +117,13 @@ class Body extends StatelessWidget {
   }
 
   Widget buildDeveloperAvatar() {
-    return FutureBuilder<String>(
-        future: FirestoreFilesAccess().getDeveloperImage(),
-        builder: (context, snapshot) {
-          if (snapshot.hasData) {
-            final url = snapshot.data!;
-            return CircleAvatar(
-              radius: SizeConfig.screenWidth * 0.3,
-              backgroundColor: kTextColor.withOpacity(0.75),
-              backgroundImage: NetworkImage(url),
-            );
-          } else if (snapshot.hasError) {
-            final error = snapshot.error.toString();
-            Logger().e(error);
-          }
-          return CircleAvatar(
-            radius: SizeConfig.screenWidth * 0.3,
-            backgroundColor: kTextColor.withOpacity(0.75),
-          );
-        });
+    return CircleAvatar(
+      radius: SizeConfig.screenWidth * 0.3,
+      backgroundColor: kTextColor.withOpacity(0.75),
+      backgroundImage: const AssetImage("assets/images/ava.jpg"),
+    );
   }
+
 
   Future<void> launchUrl(String url) async {
     try {

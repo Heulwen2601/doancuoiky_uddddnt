@@ -14,24 +14,34 @@ class Body extends StatelessWidget {
         width: double.infinity,
         child: Padding(
           padding: EdgeInsets.symmetric(
-              horizontal: getProportionateScreenWidth(screenPadding)),
+              horizontal: getProportionateScreenWidth(20)),
           child: SingleChildScrollView(
             physics: BouncingScrollPhysics(),
             child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 SizedBox(height: SizeConfig.screenHeight * 0.04),
-                Text(
-                  "Welcome Back",
-                  style: headingStyle,
+                Center(
+                  child: Text(
+                    "Welcome Back",
+                    style: headingStyle.copyWith(
+                      fontSize: getProportionateScreenWidth(36),
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
                 ),
-                Text(
-                  "Sign in with your email and password",
-                  textAlign: TextAlign.center,
+                SizedBox(height: 10),
+                Center(
+                  child: Text(
+                    "Sign in with your email and password",
+                    textAlign: TextAlign.center,
+                    style: TextStyle(color: Colors.grey[600]),
+                  ),
                 ),
-                SizedBox(height: SizeConfig.screenHeight * 0.08),
+                SizedBox(height: getProportionateScreenHeight(20)),
                 SignInForm(),
-                SizedBox(height: SizeConfig.screenHeight * 0.08),
-                NoAccountText(),
+                SizedBox(height: getProportionateScreenHeight(20)),
+                Center(child: NoAccountText()),
                 SizedBox(height: getProportionateScreenHeight(20)),
               ],
             ),

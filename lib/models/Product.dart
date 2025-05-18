@@ -5,7 +5,7 @@ enum ProductType {
   Computers,
   Gaming_chair,
   Tech_cleaning_kit,
-  Rgb_lighting,
+  RGB_lighting,
   Accessories,
   Others,
 }

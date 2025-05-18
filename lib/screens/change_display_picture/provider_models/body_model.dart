@@ -1,13 +1,18 @@
-import 'dart:io';
-
-import 'package:flutter/cupertino.dart';
+import 'dart:typed_data';
+import 'package:flutter/material.dart';
 
 class ChosenImage extends ChangeNotifier {
-  late File _chosenImage = File('');
+  Uint8List? _imageBytes;
 
-  File get chosenImage => _chosenImage;
-  set setChosenImage(File img) {
-    _chosenImage = img;
+  Uint8List? get imageBytes => _imageBytes;
+
+  set imageBytes(Uint8List? value) {
+    _imageBytes = value;
+    notifyListeners();
+  }
+
+  void clear() {
+    _imageBytes = null;
     notifyListeners();
   }
 }

@@ -1,7 +1,9 @@
 import 'dart:io';
+import 'dart:typed_data';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
+import 'package:flutter/material.dart';
 
 class FirestoreFilesAccess {
   FirestoreFilesAccess._privateConstructor();
@@ -31,21 +33,14 @@ class FirestoreFilesAccess {
     return true;
   }
 
-  Future<String> getDeveloperImage() async {
-    const filename = "about_developer/developer";
-    List<String> extensions = <String>["jpg", "jpeg", "jpe", "jfif"];
-    final Reference firestorageRef = FirebaseStorage.instance.ref();
-    for (final ext in extensions) {
-      try {
-        final url =
-            await firestorageRef.child("$filename.$ext").getDownloadURL();
-        return url;
-      } catch (_) {
-        continue;
-      }
-    }
-    throw FirebaseException(
-        message: "No JPEG Image found for Developer",
-        plugin: 'Firebase Storage');
+  ImageProvider getDeveloperImage() {
+    return const AssetImage("assets/images/ava.jpg");
   }
+
+  Future<String> uploadBytesToPath(Uint8List bytes, String path) async {
+    final ref = FirebaseStorage.instance.ref().child(path);
+    await ref.putData(bytes);
+    return await ref.getDownloadURL();
+  }
+
 }
