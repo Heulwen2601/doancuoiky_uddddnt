@@ -3,7 +3,6 @@ import 'package:do_an_ck_uddddnt/components/default_button.dart';
 import 'package:do_an_ck_uddddnt/services/authentification/authentification_service.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:future_progress_dialog/future_progress_dialog.dart';
 
 import '../../../size_config.dart';
 

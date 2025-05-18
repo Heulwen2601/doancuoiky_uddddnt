@@ -11,7 +11,6 @@ import 'package:do_an_ck_uddddnt/services/data_streams/favourite_products_stream
 import 'package:do_an_ck_uddddnt/services/database/product_database_helper.dart';
 import 'package:do_an_ck_uddddnt/size_config.dart';
 import 'package:flutter/material.dart';
-import 'package:future_progress_dialog/future_progress_dialog.dart';
 import 'package:logger/logger.dart';
 import '../../../utils.dart';
 import '../components/home_header.dart';

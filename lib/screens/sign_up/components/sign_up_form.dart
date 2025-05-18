@@ -6,7 +6,6 @@ import 'package:do_an_ck_uddddnt/exceptions/firebaseauth/signup_exceptions.dart'
 import 'package:do_an_ck_uddddnt/services/authentification/authentification_service.dart';
 import 'package:do_an_ck_uddddnt/size_config.dart';
 import 'package:flutter/material.dart';
-import 'package:future_progress_dialog/future_progress_dialog.dart';
 import 'package:logger/logger.dart';
 
 import '../../../constants.dart';

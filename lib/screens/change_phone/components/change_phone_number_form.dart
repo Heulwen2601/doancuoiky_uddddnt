@@ -3,7 +3,7 @@ import 'package:do_an_ck_uddddnt/components/async_progress_dialog.dart';
 import 'package:do_an_ck_uddddnt/components/default_button.dart';
 import 'package:do_an_ck_uddddnt/services/database/user_database_helper.dart';
 import 'package:flutter/material.dart';
-import 'package:future_progress_dialog/future_progress_dialog.dart';
+
 import 'package:logger/logger.dart';
 
 import '../../../size_config.dart';

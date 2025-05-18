@@ -62,6 +62,8 @@ class Body extends StatelessWidget {
                     IconButton(
                       icon: SvgPicture.asset(
                         "assets/icons/github_icon.svg",
+                        width: 100, 
+                        height: 100,
                         color: kTextColor.withOpacity(0.75),
                       ),
                       color: kTextColor.withOpacity(0.75),

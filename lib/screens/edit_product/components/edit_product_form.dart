@@ -1,23 +1,13 @@
 import 'dart:io';
 
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:do_an_ck_uddddnt/components/async_progress_dialog.dart';
 import 'package:do_an_ck_uddddnt/components/default_button.dart';
-import 'package:do_an_ck_uddddnt/exceptions/local_files_handling/image_picking_exceptions.dart';
-import 'package:do_an_ck_uddddnt/exceptions/local_files_handling/local_file_handling_exception.dart';
 import 'package:do_an_ck_uddddnt/models/Product.dart';
 import 'package:do_an_ck_uddddnt/screens/edit_product/provider_models/ProductDetails.dart';
 import 'package:do_an_ck_uddddnt/services/database/product_database_helper.dart';
-import 'package:do_an_ck_uddddnt/services/firestore_files_access/firestore_files_access_service.dart';
 import 'package:do_an_ck_uddddnt/services/local_files_access/local_files_access_service.dart';
-import 'package:enum_to_string/enum_to_string.dart';
 import 'package:flutter/material.dart';
-import 'package:future_progress_dialog/future_progress_dialog.dart';
-import 'package:logger/logger.dart';
 import 'package:provider/provider.dart';
-
 import '../../../constants.dart';
-import '../../../size_config.dart';
 
 class EditProductForm extends StatefulWidget {
   final Product? product; // cho phép null khi tạo sản phẩm mới

@@ -3,7 +3,6 @@ import 'package:do_an_ck_uddddnt/services/authentification/authentification_serv
 import 'package:do_an_ck_uddddnt/services/database/user_database_helper.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
-import 'package:future_progress_dialog/future_progress_dialog.dart';
 import 'package:logger/logger.dart';
 
 import '../../../utils.dart';

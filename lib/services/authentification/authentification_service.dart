@@ -7,7 +7,6 @@ import 'package:do_an_ck_uddddnt/exceptions/firebaseauth/signin_exceptions.dart'
 import 'package:do_an_ck_uddddnt/exceptions/firebaseauth/signup_exceptions.dart';
 import 'package:do_an_ck_uddddnt/services/database/user_database_helper.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter/cupertino.dart';
 
 class AuthentificationService {
   static const String USER_NOT_FOUND_EXCEPTION_CODE = "user-not-found";

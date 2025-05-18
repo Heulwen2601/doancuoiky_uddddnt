@@ -15,7 +15,6 @@ import 'package:do_an_ck_uddddnt/services/database/user_database_helper.dart';
 import 'package:do_an_ck_uddddnt/utils.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:future_progress_dialog/future_progress_dialog.dart';
 import 'package:logger/logger.dart';
 import '../../change_display_name/change_display_name_screen.dart';
 
